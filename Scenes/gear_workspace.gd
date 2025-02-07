@@ -198,14 +198,40 @@ func _on_line_edit_9_submitted(new_text): # Comment
 func _process(_delta: float) -> void:
 	pass
 
+func update_graphics_hovered_row():
+	if hovered_row >= 0:
+		for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
+			c.get_child(hovered_row).modulate = Color(1,0.8,0.6)
+
+func update_graphics_selected_row():
+	if selected_row >= 0:
+		for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
+			c.get_child(selected_row).modulate = Color(1,0.5,0)
+
+func reset_graphics_row():
+	for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
+		for cc in c.get_children():
+			cc.modulate = Color(1,1,1)
+
+func _on_button_row_selected(id):
+	selected_row = id
+	update_gear_panel(id)
+	reset_graphics_row()
+	update_graphics_selected_row()
+	selected_gear_changed = false
+	print(id)
+
 func _on_button_row_hovered(id):
-	hovered_row = id
-	print("row_id ", id)
+	if hovered_row != id:
+		hovered_row = id
+		reset_graphics_row()
+		update_graphics_hovered_row()
+		update_graphics_selected_row()
 
 func reload_database_2():
 	var row_id = 0
 	
-	for i in range(0,9):
+	for i in range(0,8):
 		var new_vbox: VBoxContainer = VBoxContainer.new()
 		if i == 1 or i == 2 or i == 7:
 			new_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -223,6 +249,7 @@ func reload_database_2():
 		new_button.set_column_id(0)
 		new_button.set_column_size(24)
 		new_button.row_hovered.connect(_on_button_row_hovered)
+		new_button.row_selected.connect(_on_button_row_selected)
 		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(0).add_child(new_button)
 		
 		new_button = GridButton.new()
@@ -231,6 +258,7 @@ func reload_database_2():
 		new_button.set_column_id(1)
 		new_button.set_column_size(0)
 		new_button.row_hovered.connect(_on_button_row_hovered)
+		new_button.row_selected.connect(_on_button_row_selected)
 		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(1).add_child(new_button)
 		
 		new_button = GridButton.new()
@@ -239,6 +267,7 @@ func reload_database_2():
 		new_button.set_column_id(2)
 		new_button.set_column_size(0)
 		new_button.row_hovered.connect(_on_button_row_hovered)
+		new_button.row_selected.connect(_on_button_row_selected)
 		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(2).add_child(new_button)
 		
 		new_button = GridButton.new()
@@ -247,6 +276,7 @@ func reload_database_2():
 		new_button.set_column_id(3)
 		new_button.set_column_size(0)
 		new_button.row_hovered.connect(_on_button_row_hovered)
+		new_button.row_selected.connect(_on_button_row_selected)
 		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(3).add_child(new_button)
 		
 		new_button = GridButton.new()
@@ -255,6 +285,7 @@ func reload_database_2():
 		new_button.set_column_id(4)
 		new_button.set_column_size(24)
 		new_button.row_hovered.connect(_on_button_row_hovered)
+		new_button.row_selected.connect(_on_button_row_selected)
 		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(4).add_child(new_button)
 		
 		new_button = GridButton.new()
@@ -263,6 +294,7 @@ func reload_database_2():
 		new_button.set_column_id(5)
 		new_button.set_column_size(0)
 		new_button.row_hovered.connect(_on_button_row_hovered)
+		new_button.row_selected.connect(_on_button_row_selected)
 		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(5).add_child(new_button)
 		
 		new_button = GridButton.new()
@@ -276,6 +308,7 @@ func reload_database_2():
 		new_button.set_column_id(6)
 		new_button.set_column_size(24)
 		new_button.row_hovered.connect(_on_button_row_hovered)
+		new_button.row_selected.connect(_on_button_row_selected)
 		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(6).add_child(new_button)
 		
 		new_button = GridButton.new()
@@ -287,6 +320,7 @@ func reload_database_2():
 		new_button.set_column_id(7)
 		new_button.set_column_size(0)
 		new_button.row_hovered.connect(_on_button_row_hovered)
+		new_button.row_selected.connect(_on_button_row_selected)
 		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(7).add_child(new_button)
 		
 		#if not display_ids and column_id == 0:
@@ -413,7 +447,7 @@ func reload_database():
 		
 		row_id += 1
 	
-	update_highlighted_row()
+	#update_highlighted_row()
 
 func add_header_grid_button(text: String, row_id: int, column_id: int, column_size: int):
 	var new_button: GridButton = GridButton.new()
@@ -477,15 +511,6 @@ func _on_row_selected(row_id):
 	selected_row = row_id
 	update_gear_panel(row_id)
 	selected_gear_changed = false
-	update_highlighted_row()
-
-func update_highlighted_row():
-	if selected_row >= 0:
-		for c in database_grid.get_children():
-			c.modulate = Color(1,1,1)
-		database_grid.get_children()[selected_row].modulate = Color(1,0.5,0)
-		print("Row ", selected_row, " become orange")
-	print("Selected row is ", selected_row)
 
 func update_gear_panel(row_id):
 	gear_form.get_node("LineEdit").set_text(str(gear_database.gears[row_id].id))
