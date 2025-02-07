@@ -1,0 +1,9 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://chwj7cyxneeh1"]
+
+[ext_resource type="StyleBox" uid="uid://cwy8fhehtijpf" path="res://Themes/grid_button_normal.tres" id="1_d4yo5"]
+
+[resource]
+Button/font_sizes/font_size = 10
+Button/styles/focus = ExtResource("1_d4yo5")
+Button/styles/normal = ExtResource("1_d4yo5")
+Button/styles/pressed = ExtResource("1_d4yo5")

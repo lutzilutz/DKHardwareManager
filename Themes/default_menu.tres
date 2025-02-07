@@ -1,0 +1,6 @@
+[gd_resource type="Theme" format=3 uid="uid://pckcybv0eocq"]
+
+[resource]
+MenuBar/constants/h_separation = 0
+MenuBar/font_sizes/font_size = 10
+PopupMenu/font_sizes/font_size = 10

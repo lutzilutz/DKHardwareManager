@@ -1,0 +1,106 @@
+[gd_scene load_steps=9 format=3 uid="uid://bhdftrrclg4co"]
+
+[ext_resource type="Script" path="res://Scenes/main.gd" id="1_4u2by"]
+[ext_resource type="PackedScene" uid="uid://e1b28cf47r24" path="res://Scenes/gear_workspace.tscn" id="2_qdpo8"]
+[ext_resource type="Theme" uid="uid://pckcybv0eocq" path="res://Themes/default_menu.tres" id="2_qqu7w"]
+[ext_resource type="Texture2D" uid="uid://clds32tkto73c" path="res://Resources/Icons/database_icon_32.png" id="3_31aic"]
+[ext_resource type="PackedScene" uid="uid://y7r1uc1aocj8" path="res://Scenes/shooting_workspace.tscn" id="3_b4230"]
+[ext_resource type="Texture2D" uid="uid://dde0g4wkbe27r" path="res://Resources/Icons/camera_icon_32.png" id="4_d47dl"]
+[ext_resource type="Texture2D" uid="uid://qstfecdy8f7q" path="res://Resources/Icons/user_icon_32.png" id="5_8g7yr"]
+[ext_resource type="PackedScene" uid="uid://c87unh56ugob4" path="res://Scenes/user_workspace.tscn" id="8_sgf5s"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("1_4u2by")
+
+[node name="Window" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuBar" type="MenuBar" parent="Window"]
+layout_mode = 2
+theme = ExtResource("2_qqu7w")
+flat = true
+
+[node name="File" type="PopupMenu" parent="Window/MenuBar"]
+size = Vector2i(375, 100)
+item_count = 4
+item_0/text = "New Database"
+item_0/id = 3
+item_1/text = "Open"
+item_2/text = "Save"
+item_2/id = 1
+item_3/text = "Quit"
+item_3/id = 2
+
+[node name="View" type="PopupMenu" parent="Window/MenuBar"]
+auto_translate_mode = 1
+size = Vector2i(131, 100)
+item_count = 1
+item_0/text = "Show IDs"
+item_0/checkable = 1
+item_0/checked = true
+
+[node name="Help" type="PopupMenu" parent="Window/MenuBar"]
+auto_translate_mode = 1
+
+[node name="AddGear" type="Button" parent="Window"]
+visible = false
+layout_mode = 2
+text = "Add new gear"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Window"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window/HBoxContainer2"]
+layout_mode = 2
+
+[node name="DatabaseButton" type="TextureButton" parent="Window/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("3_31aic")
+stretch_mode = 3
+
+[node name="ShootingButton" type="TextureButton" parent="Window/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("4_d47dl")
+stretch_mode = 3
+
+[node name="UserButton" type="TextureButton" parent="Window/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("5_8g7yr")
+stretch_mode = 3
+
+[node name="Workspace" type="MarginContainer" parent="Window/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="GearWorkspace" parent="Window/HBoxContainer2/Workspace" instance=ExtResource("2_qdpo8")]
+layout_mode = 2
+
+[node name="ShootingWorkspace" parent="Window/HBoxContainer2/Workspace" instance=ExtResource("3_b4230")]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="UserWorkspace" parent="Window/HBoxContainer2/Workspace" instance=ExtResource("8_sgf5s")]
+visible = false
+layout_mode = 2
