@@ -7,6 +7,8 @@
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -1024.0
+offset_bottom = -257.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -14,6 +16,7 @@ size_flags_vertical = 3
 script = ExtResource("1_h0jah")
 
 [node name="NewGearButton" type="Button" parent="."]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Generate new gear"
@@ -27,6 +30,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="GridContainer2" type="GridContainer" parent="HBoxContainer2/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme = ExtResource("2_e8uob")
 theme_override_constants/h_separation = 0
@@ -36,20 +40,21 @@ columns = 9
 [node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer2/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
 [node name="GridContainer" type="VBoxContainer" parent="HBoxContainer2/VBoxContainer/ScrollContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("2_e8uob")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer2"]
-visible = false
-layout_mode = 2
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer2/HBoxContainer"]
+[node name="DataHBox" type="HBoxContainer" parent="HBoxContainer2/VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("2_e8uob")
+theme_override_constants/separation = 0
 
 [node name="GearForm" type="GridContainer" parent="HBoxContainer2"]
 layout_mode = 2

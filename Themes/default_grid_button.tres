@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=2 format=3 uid="uid://chwj7cyxneeh1"]
 
-[ext_resource type="StyleBox" uid="uid://cwy8fhehtijpf" path="res://Themes/grid_button_normal.tres" id="1_d4yo5"]
+[ext_resource type="StyleBox" uid="uid://pmiykxy6iads" path="res://Themes/grid_button_normal.tres" id="1_d4yo5"]
 
 [resource]
 Button/font_sizes/font_size = 10

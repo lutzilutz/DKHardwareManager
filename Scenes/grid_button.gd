@@ -1,6 +1,7 @@
 class_name GridButton
 extends Button
 
+signal row_hovered(row_id)
 signal row_selected(row_id)
 
 var row_id: int = -1
@@ -26,6 +27,8 @@ func _ready() -> void:
 	add_theme_stylebox_override("hover_pressed", stylebox_theme_default)
 	add_theme_stylebox_override("normal", stylebox_theme_default)
 	add_theme_stylebox_override("pressed", stylebox_theme_default)
+	
+	mouse_entered.connect(_on_hovering)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -62,3 +65,6 @@ func set_column_id(new_id):
 
 func _pressed() -> void:
 	emit_signal("row_selected", row_id)
+
+func _on_hovering():
+	emit_signal("row_hovered", row_id)

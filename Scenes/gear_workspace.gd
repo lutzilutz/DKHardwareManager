@@ -8,6 +8,7 @@ var gear_database: GearDatabase
 @onready var database_grid: VBoxContainer = get_node("HBoxContainer2/VBoxContainer/ScrollContainer/GridContainer")
 @onready var gear_form: GridContainer = get_node("HBoxContainer2/GearForm")
 var selected_row: int = -1
+var hovered_row: int = -1
 var selected_gear_changed: bool = false: set = set_selected_gear_changed
 var sorting_ascending: bool = true
 var sorting_column_id: int = -1
@@ -21,6 +22,8 @@ func _ready() -> void:
 	get_parent().get_parent().get_parent().get_parent().display_ids.connect(_on_display_ids)
 	get_node("NewGearButton").pressed.connect(_on_new_gear_button_pressed)
 	connect_gear_form()
+	
+	#get_node("HBoxContainer2/VBoxContainer")
 	
 	#print(Utils.Department)
 	#print(Utils.get_department_categories())
@@ -195,7 +198,143 @@ func _on_line_edit_9_submitted(new_text): # Comment
 func _process(_delta: float) -> void:
 	pass
 
+func _on_button_row_hovered(id):
+	hovered_row = id
+	print("row_id ", id)
+
+func reload_database_2():
+	var row_id = 0
+	
+	for i in range(0,9):
+		var new_vbox: VBoxContainer = VBoxContainer.new()
+		if i == 1 or i == 2 or i == 7:
+			new_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			if i == 1 or i == 2:
+				new_vbox.size_flags_stretch_ratio = 0.4
+		new_vbox.add_theme_constant_override("separation",0)
+		new_vbox.set_mouse_filter(Control.MOUSE_FILTER_PASS)
+		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").add_child(new_vbox)
+	
+	for g: Gear in gear_database.gears:
+		
+		var new_button: GridButton = GridButton.new()
+		new_button.set_text(str(g.id))
+		new_button.set_row_id(row_id)
+		new_button.set_column_id(0)
+		new_button.set_column_size(24)
+		new_button.row_hovered.connect(_on_button_row_hovered)
+		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(0).add_child(new_button)
+		
+		new_button = GridButton.new()
+		new_button.set_text(g.brand)
+		new_button.set_row_id(row_id)
+		new_button.set_column_id(1)
+		new_button.set_column_size(0)
+		new_button.row_hovered.connect(_on_button_row_hovered)
+		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(1).add_child(new_button)
+		
+		new_button = GridButton.new()
+		new_button.set_text(g.model)
+		new_button.set_row_id(row_id)
+		new_button.set_column_id(2)
+		new_button.set_column_size(0)
+		new_button.row_hovered.connect(_on_button_row_hovered)
+		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(2).add_child(new_button)
+		
+		new_button = GridButton.new()
+		new_button.set_text(str(g.cost))
+		new_button.set_row_id(row_id)
+		new_button.set_column_id(3)
+		new_button.set_column_size(0)
+		new_button.row_hovered.connect(_on_button_row_hovered)
+		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(3).add_child(new_button)
+		
+		new_button = GridButton.new()
+		new_button.set_text(str(g.quantity))
+		new_button.set_row_id(row_id)
+		new_button.set_column_id(4)
+		new_button.set_column_size(24)
+		new_button.row_hovered.connect(_on_button_row_hovered)
+		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(4).add_child(new_button)
+		
+		new_button = GridButton.new()
+		new_button.set_text(Utils.category_id_to_string(g.department_id,g.category_id, true))
+		new_button.set_row_id(row_id)
+		new_button.set_column_id(5)
+		new_button.set_column_size(0)
+		new_button.row_hovered.connect(_on_button_row_hovered)
+		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(5).add_child(new_button)
+		
+		new_button = GridButton.new()
+		var tmp_text = ""
+		if g.need_loading:
+			tmp_text = "☒"
+		else:
+			tmp_text = "☐"
+		new_button.set_text(tmp_text)
+		new_button.set_row_id(row_id)
+		new_button.set_column_id(6)
+		new_button.set_column_size(24)
+		new_button.row_hovered.connect(_on_button_row_hovered)
+		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(6).add_child(new_button)
+		
+		new_button = GridButton.new()
+		if g.comment == "":
+			new_button.set_text(" ")
+		else:
+			new_button.set_text(g.comment)
+		new_button.set_row_id(row_id)
+		new_button.set_column_id(7)
+		new_button.set_column_size(0)
+		new_button.row_hovered.connect(_on_button_row_hovered)
+		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(7).add_child(new_button)
+		
+		#if not display_ids and column_id == 0:
+			#new_button.visible = false
+		
+		#var row: HBoxContainer = HBoxContainer.new()
+		#database_grid.add_child(row)
+		#
+		## ID
+		#add_grid_button(row, str(g.id), row_id, 0, 24)
+		#
+		## Brand
+		#add_grid_button(row, g.brand, row_id, 1, 120)
+		#
+		## Model
+		#add_grid_button(row, g.model, row_id, 2, 200)
+		#
+		## Cost
+		#add_grid_button(row, str(g.cost), row_id, 3, 120)
+		#
+		## Quantity
+		#add_grid_button(row, str(g.quantity) + "x", row_id, 4, 24)
+		#
+		## Category
+		##add_grid_button(row, Utils.category_id_to_string(g.category), row_id, 5, 120)
+		#add_grid_button(row, Utils.category_id_to_string(g.department_id,g.category_id, true), row_id, 5, 120)
+		#
+		## Need loading
+		#var tmp_text = ""
+		#if g.need_loading:
+			#tmp_text = "☒"
+		#else:
+			#tmp_text = "☐"
+		#add_grid_button(row, tmp_text, row_id, 6, 48)
+		#
+		## User
+		##add_grid_button(row, Utils.user_id_to_string(g.user_id), row_id, 7, 120)
+		#
+		## Comment
+		#add_grid_button(row, str(g.comment), row_id, 8, 120)
+		#
+		#if row_id == selected_row:
+			#row.modulate = Color(1,0.5,0)
+		
+		row_id += 1
+
 func reload_database():
+	reload_database_2()
 	
 	for c in header_grid.get_children():
 		c.queue_free()
