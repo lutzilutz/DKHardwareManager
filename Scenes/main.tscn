@@ -40,6 +40,7 @@ item_count = 4
 item_0/text = "New Database"
 item_0/id = 3
 item_1/text = "Open"
+item_1/id = 1
 item_2/text = "Save"
 item_2/id = 1
 item_3/text = "Quit"
