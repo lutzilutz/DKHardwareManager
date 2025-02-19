@@ -4,8 +4,9 @@ signal user_changed_database
 signal need_save_to_file
 
 var gear_database: GearDatabase
-@onready var header_grid: GridContainer = get_node("HBoxContainer2/VBoxContainer/GridContainer2")
-@onready var database_grid: VBoxContainer = get_node("HBoxContainer2/VBoxContainer/ScrollContainer/GridContainer")
+@onready var header_grid: HBoxContainer = get_node("HBoxContainer2/VBoxContainer/DataLabelHBox")
+#@onready var database_grid: VBoxContainer = get_node("HBoxContainer2/VBoxContainer/ScrollContainer/GridContainer")
+@onready var database_grid: HBoxContainer = get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox")
 @onready var gear_form: GridContainer = get_node("HBoxContainer2/GearForm")
 var selected_row: int = -1
 var hovered_row: int = -1
@@ -22,11 +23,6 @@ func _ready() -> void:
 	get_parent().get_parent().get_parent().get_parent().display_ids.connect(_on_display_ids)
 	get_node("NewGearButton").pressed.connect(_on_new_gear_button_pressed)
 	connect_gear_form()
-	
-	#get_node("HBoxContainer2/VBoxContainer")
-	
-	#print(Utils.Department)
-	#print(Utils.get_department_categories())
 	
 	build_department_dropdowns()
 	build_user_dropdowns()
@@ -78,10 +74,10 @@ func _on_display_ids(is_displaying):
 		if c.column_id == 0:
 			c.visible = is_displaying
 	
-	for r in database_grid.get_children():
-		for b in r.get_children():
-			if b.column_id == 0:
-				b.visible = is_displaying
+	#for r in database_grid.get_children():
+		#for b in r.get_children():
+			#if b.column_id == 0:
+				#b.visible = is_displaying
 
 func _on_line_edit_changed(_new_text):
 	set_selected_gear_changed(true)
@@ -200,6 +196,7 @@ func _process(_delta: float) -> void:
 
 func update_graphics_hovered_row():
 	if hovered_row >= 0:
+		#print(get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children().size())
 		for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
 			c.get_child(hovered_row).modulate = Color(1,0.8,0.6)
 
@@ -229,9 +226,63 @@ func _on_button_row_hovered(id):
 		update_graphics_selected_row()
 
 func reload_database_2():
+	
+	print("----- Database structure before reloading -----")
+	for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
+		print("[DataHBox child]")
+		print("   [", c.get_children().size(), " Subchild]")
+	print("-----------------------------------------------")
+	
 	var row_id = 0
 	
+	for c in header_grid.get_children():
+		c.queue_free()
+	
+	for i in range(get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children().size()):
+		#get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(i).queue_free()
+		#for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(i).get_children():
+			#c.queue_free()
+		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(i).queue_free()
+	
+	for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
+		c.queue_free()
+	
 	for i in range(0,8):
+		# Header cells
+		#var new_button: GridButton = GridButton.new()
+		match i:
+			0:
+				add_header_grid_button("ID", 0, i, 0)
+				#new_button.set_text("ID")
+			1:
+				add_header_grid_button("Brand", 1, i, 0)
+				#new_button.set_text("Brand")
+			2:
+				add_header_grid_button("Model", 2, i, 0)
+				#new_button.set_text("Model")
+			3:
+				add_header_grid_button("Cost", 3, i, 0)
+				#new_button.set_text("Cost")
+			4:
+				add_header_grid_button("Qy", 4, i, 0)
+				#new_button.set_text("Qy")
+			5:
+				add_header_grid_button("Category", 5, i, 0)
+				#new_button.set_text("Category")
+			6:
+				add_header_grid_button("Load", 6, i, 0)
+				#new_button.set_text("Load")
+			7:
+				add_header_grid_button("Comment", 7, i, 0)
+				#new_button.set_text("Comment")
+		#new_button.set_column_id(i)
+		#if i == 1 or i == 2 or i == 7:
+			#new_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			#if i == 1 or i == 2:
+				#new_button.size_flags_stretch_ratio = 0.4
+		#get_node("HBoxContainer2/VBoxContainer/DataLabelHBox").add_child(new_button)
+		
+		# Database columns
 		var new_vbox: VBoxContainer = VBoxContainer.new()
 		if i == 1 or i == 2 or i == 7:
 			new_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -239,7 +290,13 @@ func reload_database_2():
 				new_vbox.size_flags_stretch_ratio = 0.4
 		new_vbox.add_theme_constant_override("separation",0)
 		new_vbox.set_mouse_filter(Control.MOUSE_FILTER_PASS)
+		print("Current DataHBox children count : ", get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child_count())
 		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").add_child(new_vbox)
+	
+	
+	
+	#for c in database_grid.get_children():
+		#c.queue_free()
 	
 	for g: Gear in gear_database.gears:
 		
@@ -323,9 +380,44 @@ func reload_database_2():
 		new_button.row_selected.connect(_on_button_row_selected)
 		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(7).add_child(new_button)
 		
-		#if not display_ids and column_id == 0:
-			#new_button.visible = false
-		
+		row_id += 1
+
+func reload_database():
+	reload_database_2()
+	
+	#for c in header_grid.get_children():
+		#c.queue_free()
+	#
+	#for c in database_grid.get_children():
+		#c.queue_free()
+	#
+	## ID
+	#add_header_grid_button_OLD("ID", -1, 0, 24)
+		#
+	## Brand
+	#add_header_grid_button_OLD("Brand", -1, 1, 120)
+	#
+	## Model
+	#add_header_grid_button_OLD("Model", -1, 2, 200)
+	#
+	## Cost
+	#add_header_grid_button_OLD("Cost", -1, 3, 120)
+	#
+	## Quantity
+	#add_header_grid_button_OLD("Qy", -1, 4, 24)
+	#
+	## Category
+	#add_header_grid_button_OLD("Category", -1, 5, 120)
+	#
+	## Need loading
+	#add_header_grid_button_OLD("Load", -1, 6, 48)
+	#
+	## Comment
+	#add_header_grid_button_OLD("Comment", -1, 8, 120)
+	#
+	#var row_id = 0
+	#for g: Gear in gear_database.gears:
+		#
 		#var row: HBoxContainer = HBoxContainer.new()
 		#database_grid.add_child(row)
 		#
@@ -356,98 +448,13 @@ func reload_database_2():
 			#tmp_text = "☐"
 		#add_grid_button(row, tmp_text, row_id, 6, 48)
 		#
-		## User
-		##add_grid_button(row, Utils.user_id_to_string(g.user_id), row_id, 7, 120)
-		#
 		## Comment
 		#add_grid_button(row, str(g.comment), row_id, 8, 120)
 		#
 		#if row_id == selected_row:
 			#row.modulate = Color(1,0.5,0)
-		
-		row_id += 1
-
-func reload_database():
-	reload_database_2()
-	
-	for c in header_grid.get_children():
-		c.queue_free()
-	
-	for c in database_grid.get_children():
-		c.queue_free()
-	
-	# ID
-	add_header_grid_button("ID", -1, 0, 24)
-		
-	# Brand
-	add_header_grid_button("Brand", -1, 1, 120)
-	
-	# Model
-	add_header_grid_button("Model", -1, 2, 200)
-	
-	# Cost
-	add_header_grid_button("Cost", -1, 3, 120)
-	
-	# Quantity
-	add_header_grid_button("Qy", -1, 4, 24)
-	
-	# Category
-	add_header_grid_button("Category", -1, 5, 120)
-	
-	# Need loading
-	add_header_grid_button("Load", -1, 6, 48)
-	
-	# User
-	#add_header_grid_button("User", -1, 7, 120)
-	
-	# Comment
-	add_header_grid_button("Comment", -1, 8, 120)
-	
-	var row_id = 0
-	for g: Gear in gear_database.gears:
-		
-		var row: HBoxContainer = HBoxContainer.new()
-		database_grid.add_child(row)
-		
-		# ID
-		add_grid_button(row, str(g.id), row_id, 0, 24)
-		
-		# Brand
-		add_grid_button(row, g.brand, row_id, 1, 120)
-		
-		# Model
-		add_grid_button(row, g.model, row_id, 2, 200)
-		
-		# Cost
-		add_grid_button(row, str(g.cost), row_id, 3, 120)
-		
-		# Quantity
-		add_grid_button(row, str(g.quantity) + "x", row_id, 4, 24)
-		
-		# Category
-		#add_grid_button(row, Utils.category_id_to_string(g.category), row_id, 5, 120)
-		add_grid_button(row, Utils.category_id_to_string(g.department_id,g.category_id, true), row_id, 5, 120)
-		
-		# Need loading
-		var tmp_text = ""
-		if g.need_loading:
-			tmp_text = "☒"
-		else:
-			tmp_text = "☐"
-		add_grid_button(row, tmp_text, row_id, 6, 48)
-		
-		# User
-		#add_grid_button(row, Utils.user_id_to_string(g.user_id), row_id, 7, 120)
-		
-		# Comment
-		add_grid_button(row, str(g.comment), row_id, 8, 120)
-		
-		if row_id == selected_row:
-			row.modulate = Color(1,0.5,0)
-		
-		row_id += 1
-	
-	#update_highlighted_row()
+		#
+		#row_id += 1
 
 func add_header_grid_button(text: String, row_id: int, column_id: int, column_size: int):
 	var new_button: GridButton = GridButton.new()
@@ -462,7 +469,27 @@ func add_header_grid_button(text: String, row_id: int, column_id: int, column_si
 	if not display_ids and column_id == 0:
 		new_button.visible = false
 
+func add_header_grid_button_OLD(text: String, row_id: int, column_id: int, column_size: int):
+	var new_button: GridButton = GridButton.new()
+	new_button.set_text(text)
+	new_button.set_row_id(row_id)
+	new_button.set_column_id(column_id)
+	new_button.set_column_size(column_size)
+	header_grid.add_child(new_button)
+	
+	connect_header_buttons_OLD(new_button, column_id)
+	
+	if not display_ids and column_id == 0:
+		new_button.visible = false
+
 func connect_header_buttons(new_button: GridButton, column_id: int):
+	#print("Column ID = ", column_id)
+	if column_id in range(0, 10):
+		new_button.pressed.connect(_on_header_pressed.bind(column_id))
+	else:
+		print("Unknown column ID in connect_header_buttons()")
+
+func connect_header_buttons_OLD(new_button: GridButton, column_id: int):
 	#print("Column ID = ", column_id)
 	if column_id in range(0, 10):
 		new_button.pressed.connect(_on_header_pressed.bind(column_id))
@@ -486,7 +513,7 @@ func _on_header_pressed(column_id):
 		sorting_ascending = not sorting_ascending
 		print("ascending")
 	else:
-		sorting_ascending = true
+		sorting_ascending = false
 		print("descending")
 	sorting_column_id = column_id
 	gear_database.sort_gears(column_id, sorting_ascending)
@@ -502,11 +529,6 @@ func _on_header_pressed(column_id):
 ##### Signals #################################################################
 
 func _on_row_selected(row_id):
-	#for c in database_grid.get_children():
-		#c.set_highlighted(false)
-	#
-	#for i in range(row_id*9, (row_id+1)*9):
-		#database_grid.get_children()[i].set_highlighted(true)
 	print("Row selected = ", row_id)
 	selected_row = row_id
 	update_gear_panel(row_id)
@@ -518,15 +540,10 @@ func update_gear_panel(row_id):
 	gear_form.get_node("LineEdit3").set_text(gear_database.gears[row_id].model)
 	gear_form.get_node("LineEdit4").set_text(str(gear_database.gears[row_id].cost))
 	gear_form.get_node("LineEdit5").set_text(str(gear_database.gears[row_id].quantity))
-	#gear_form.get_node("LineEdit6").set_text(Utils.category_id_to_string(gear_database.gears[row_id].category))
 	gear_form.get_node("LineEdit6").selected = gear_database.gears[row_id].department_id
 	build_category_dropdowns(gear_database.gears[row_id].department_id)
 	gear_form.get_node("LineEdit7").selected = gear_database.gears[row_id].category_id
-	#gear_form.get_node("LineEdit7").set_text(Utils.category_id_to_string(gear_database.gears[row_id].department_id,gear_database.gears[row_id].category_id, false))
-	#gear_form.get_node("LineEdit8").set_text(str(gear_database.gears[row_id].need_loading))
 	gear_form.get_node("LineEdit8").button_pressed = gear_database.gears[row_id].need_loading
-	#gear_form.get_node("LineEdit9").set_text(Utils.user_id_to_string(gear_database.gears[row_id].user_id))
-	#gear_form.get_node("LineEdit9").selected = gear_database.gears[row_id].user_id
 	gear_form.get_node("LineEdit10").set_text(gear_database.gears[row_id].comment)
 
 func _on_database_changed(new_gear_database):

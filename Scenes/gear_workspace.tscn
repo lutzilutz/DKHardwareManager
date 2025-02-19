@@ -7,8 +7,6 @@
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1024.0
-offset_bottom = -257.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -30,12 +28,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="GridContainer2" type="GridContainer" parent="HBoxContainer2/VBoxContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("2_e8uob")
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 9
+
+[node name="DataLabelHBox" type="HBoxContainer" parent="HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_e8uob")
+theme_override_constants/separation = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer2/VBoxContainer"]
 layout_mode = 2
