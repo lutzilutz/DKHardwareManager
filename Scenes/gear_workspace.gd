@@ -196,17 +196,17 @@ func _process(_delta: float) -> void:
 
 func update_graphics_hovered_row():
 	if hovered_row >= 0:
-		#print(get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children().size())
-		for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
+		#print(database_grid.get_children().size())
+		for c in database_grid.get_children():
 			c.get_child(hovered_row).modulate = Color(1,0.8,0.6)
 
 func update_graphics_selected_row():
 	if selected_row >= 0:
-		for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
+		for c in database_grid.get_children():
 			c.get_child(selected_row).modulate = Color(1,0.5,0)
 
 func reset_graphics_row():
-	for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
+	for c in database_grid.get_children():
 		for cc in c.get_children():
 			cc.modulate = Color(1,1,1)
 
@@ -225,27 +225,51 @@ func _on_button_row_hovered(id):
 		update_graphics_hovered_row()
 		update_graphics_selected_row()
 
-func reload_database_2():
+func reset_database_grid():
 	
-	print("----- Database structure before reloading -----")
-	for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
+	print("----- Database structure before reset ---------")
+	for c in database_grid.get_children():
 		print("[DataHBox child]")
 		print("   [", c.get_children().size(), " Subchild]")
+	if database_grid.get_child_count() == 0:
+		print("No child")
 	print("-----------------------------------------------")
-	
-	var row_id = 0
 	
 	for c in header_grid.get_children():
 		c.queue_free()
 	
-	for i in range(get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children().size()):
-		#get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(i).queue_free()
-		#for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(i).get_children():
+	#for i in range(database_grid.get_children().size()):
+		#database_grid.get_child(i).queue_free()
+		#for c in database_grid.get_child(i).get_children():
 			#c.queue_free()
-		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(i).queue_free()
+		#database_grid.get_child(i).queue_free()
 	
-	for c in get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_children():
+	#for i in range(database_grid.get_child_count()):
+		#for c in database_grid.get_child(i).get_children():
+			#c.queue_free()
+	
+	for c in database_grid.get_children():
 		c.queue_free()
+	
+	print("----- Database structure after reset ----------")
+	for c in database_grid.get_children():
+		print("[DataHBox child]")
+		print("   [", c.get_children().size(), " Subchild]")
+	if database_grid.get_child_count() == 0:
+		print("No child")
+	print("-----------------------------------------------")
+
+func reload_database_2():
+	
+	print("----- Database structure before reloading -----")
+	for c in database_grid.get_children():
+		print("[DataHBox child]")
+		print("   [", c.get_children().size(), " Subchild]")
+	if database_grid.get_child_count() == 0:
+		print("No child")
+	print("-----------------------------------------------")
+	
+	var row_id = 0
 	
 	for i in range(0,8):
 		# Header cells
@@ -284,14 +308,16 @@ func reload_database_2():
 		
 		# Database columns
 		var new_vbox: VBoxContainer = VBoxContainer.new()
+		new_vbox.name = "Column" + str(i)
 		if i == 1 or i == 2 or i == 7:
 			new_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			if i == 1 or i == 2:
 				new_vbox.size_flags_stretch_ratio = 0.4
 		new_vbox.add_theme_constant_override("separation",0)
 		new_vbox.set_mouse_filter(Control.MOUSE_FILTER_PASS)
-		print("Current DataHBox children count : ", get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child_count())
-		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").add_child(new_vbox)
+		print("Adding column node with name : ", new_vbox.name)
+		#print("Current DataHBox children count : ", database_grid.get_child_count())
+		database_grid.add_child(new_vbox)
 	
 	
 	
@@ -307,7 +333,7 @@ func reload_database_2():
 		new_button.set_column_size(24)
 		new_button.row_hovered.connect(_on_button_row_hovered)
 		new_button.row_selected.connect(_on_button_row_selected)
-		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(0).add_child(new_button)
+		database_grid.get_child(0).add_child(new_button)
 		
 		new_button = GridButton.new()
 		new_button.set_text(g.brand)
@@ -316,7 +342,7 @@ func reload_database_2():
 		new_button.set_column_size(0)
 		new_button.row_hovered.connect(_on_button_row_hovered)
 		new_button.row_selected.connect(_on_button_row_selected)
-		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(1).add_child(new_button)
+		database_grid.get_child(1).add_child(new_button)
 		
 		new_button = GridButton.new()
 		new_button.set_text(g.model)
@@ -325,7 +351,7 @@ func reload_database_2():
 		new_button.set_column_size(0)
 		new_button.row_hovered.connect(_on_button_row_hovered)
 		new_button.row_selected.connect(_on_button_row_selected)
-		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(2).add_child(new_button)
+		database_grid.get_child(2).add_child(new_button)
 		
 		new_button = GridButton.new()
 		new_button.set_text(str(g.cost))
@@ -334,7 +360,7 @@ func reload_database_2():
 		new_button.set_column_size(0)
 		new_button.row_hovered.connect(_on_button_row_hovered)
 		new_button.row_selected.connect(_on_button_row_selected)
-		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(3).add_child(new_button)
+		database_grid.get_child(3).add_child(new_button)
 		
 		new_button = GridButton.new()
 		new_button.set_text(str(g.quantity))
@@ -343,7 +369,7 @@ func reload_database_2():
 		new_button.set_column_size(24)
 		new_button.row_hovered.connect(_on_button_row_hovered)
 		new_button.row_selected.connect(_on_button_row_selected)
-		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(4).add_child(new_button)
+		database_grid.get_child(4).add_child(new_button)
 		
 		new_button = GridButton.new()
 		new_button.set_text(Utils.category_id_to_string(g.department_id,g.category_id, true))
@@ -352,7 +378,7 @@ func reload_database_2():
 		new_button.set_column_size(0)
 		new_button.row_hovered.connect(_on_button_row_hovered)
 		new_button.row_selected.connect(_on_button_row_selected)
-		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(5).add_child(new_button)
+		database_grid.get_child(5).add_child(new_button)
 		
 		new_button = GridButton.new()
 		var tmp_text = ""
@@ -366,7 +392,7 @@ func reload_database_2():
 		new_button.set_column_size(24)
 		new_button.row_hovered.connect(_on_button_row_hovered)
 		new_button.row_selected.connect(_on_button_row_selected)
-		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(6).add_child(new_button)
+		database_grid.get_child(6).add_child(new_button)
 		
 		new_button = GridButton.new()
 		if g.comment == "":
@@ -378,9 +404,17 @@ func reload_database_2():
 		new_button.set_column_size(0)
 		new_button.row_hovered.connect(_on_button_row_hovered)
 		new_button.row_selected.connect(_on_button_row_selected)
-		get_node("HBoxContainer2/VBoxContainer/ScrollContainer/DataHBox").get_child(7).add_child(new_button)
+		database_grid.get_child(7).add_child(new_button)
 		
 		row_id += 1
+		
+	print("----- Database structure after reloading -----")
+	for c in database_grid.get_children():
+		print("[DataHBox child]")
+		print("   [", c.get_children().size(), " Subchild]")
+	if database_grid.get_child_count() == 0:
+		print("No child")
+	print("-----------------------------------------------")
 
 func reload_database():
 	reload_database_2()
@@ -527,6 +561,12 @@ func _on_header_pressed(column_id):
 				b.text = "▲" + b.text
 
 ##### Signals #################################################################
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ReloadDatabase"):
+		reload_database_2()
+	if event.is_action_pressed("ResetDatabase"):
+		reset_database_grid()
 
 func _on_row_selected(row_id):
 	print("Row selected = ", row_id)
