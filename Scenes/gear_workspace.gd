@@ -227,47 +227,41 @@ func _on_button_row_hovered(id):
 
 func reset_database_grid():
 	
-	print("----- Database structure before reset ---------")
-	for c in database_grid.get_children():
-		print("[DataHBox child]")
-		print("   [", c.get_children().size(), " Subchild]")
-	if database_grid.get_child_count() == 0:
-		print("No child")
-	print("-----------------------------------------------")
+	#print("----- Database structure before reset ---------")
+	#for c in database_grid.get_children():
+		#print("[DataHBox child]")
+		#print("   [", c.get_children().size(), " Subchild]")
+	#if database_grid.get_child_count() == 0:
+		#print("No child")
+	#print("-----------------------------------------------")
 	
 	for c in header_grid.get_children():
 		c.queue_free()
-	
-	#for i in range(database_grid.get_children().size()):
-		#database_grid.get_child(i).queue_free()
-		#for c in database_grid.get_child(i).get_children():
-			#c.queue_free()
-		#database_grid.get_child(i).queue_free()
-	
-	#for i in range(database_grid.get_child_count()):
-		#for c in database_grid.get_child(i).get_children():
-			#c.queue_free()
+		await c.tree_exited
 	
 	for c in database_grid.get_children():
 		c.queue_free()
+		await c.tree_exited
 	
-	print("----- Database structure after reset ----------")
-	for c in database_grid.get_children():
-		print("[DataHBox child]")
-		print("   [", c.get_children().size(), " Subchild]")
-	if database_grid.get_child_count() == 0:
-		print("No child")
-	print("-----------------------------------------------")
+	#print("----- Database structure after reset ----------")
+	#for c in database_grid.get_children():
+		#print("[DataHBox child]")
+		#print("   [", c.get_children().size(), " Subchild]")
+	#if database_grid.get_child_count() == 0:
+		#print("No child")
+	#print("-----------------------------------------------")
 
-func reload_database_2():
+func reload_database():
 	
-	print("----- Database structure before reloading -----")
-	for c in database_grid.get_children():
-		print("[DataHBox child]")
-		print("   [", c.get_children().size(), " Subchild]")
-	if database_grid.get_child_count() == 0:
-		print("No child")
-	print("-----------------------------------------------")
+	reset_database_grid()
+	
+	#print("----- Database structure before reloading -----")
+	#for c in database_grid.get_children():
+		#print("[DataHBox child]")
+		#print("   [", c.get_children().size(), " Subchild]")
+	#if database_grid.get_child_count() == 0:
+		#print("No child")
+	#print("-----------------------------------------------")
 	
 	var row_id = 0
 	
@@ -318,11 +312,6 @@ func reload_database_2():
 		print("Adding column node with name : ", new_vbox.name)
 		#print("Current DataHBox children count : ", database_grid.get_child_count())
 		database_grid.add_child(new_vbox)
-	
-	
-	
-	#for c in database_grid.get_children():
-		#c.queue_free()
 	
 	for g: Gear in gear_database.gears:
 		
@@ -416,80 +405,6 @@ func reload_database_2():
 		print("No child")
 	print("-----------------------------------------------")
 
-func reload_database():
-	reload_database_2()
-	
-	#for c in header_grid.get_children():
-		#c.queue_free()
-	#
-	#for c in database_grid.get_children():
-		#c.queue_free()
-	#
-	## ID
-	#add_header_grid_button_OLD("ID", -1, 0, 24)
-		#
-	## Brand
-	#add_header_grid_button_OLD("Brand", -1, 1, 120)
-	#
-	## Model
-	#add_header_grid_button_OLD("Model", -1, 2, 200)
-	#
-	## Cost
-	#add_header_grid_button_OLD("Cost", -1, 3, 120)
-	#
-	## Quantity
-	#add_header_grid_button_OLD("Qy", -1, 4, 24)
-	#
-	## Category
-	#add_header_grid_button_OLD("Category", -1, 5, 120)
-	#
-	## Need loading
-	#add_header_grid_button_OLD("Load", -1, 6, 48)
-	#
-	## Comment
-	#add_header_grid_button_OLD("Comment", -1, 8, 120)
-	#
-	#var row_id = 0
-	#for g: Gear in gear_database.gears:
-		#
-		#var row: HBoxContainer = HBoxContainer.new()
-		#database_grid.add_child(row)
-		#
-		## ID
-		#add_grid_button(row, str(g.id), row_id, 0, 24)
-		#
-		## Brand
-		#add_grid_button(row, g.brand, row_id, 1, 120)
-		#
-		## Model
-		#add_grid_button(row, g.model, row_id, 2, 200)
-		#
-		## Cost
-		#add_grid_button(row, str(g.cost), row_id, 3, 120)
-		#
-		## Quantity
-		#add_grid_button(row, str(g.quantity) + "x", row_id, 4, 24)
-		#
-		## Category
-		##add_grid_button(row, Utils.category_id_to_string(g.category), row_id, 5, 120)
-		#add_grid_button(row, Utils.category_id_to_string(g.department_id,g.category_id, true), row_id, 5, 120)
-		#
-		## Need loading
-		#var tmp_text = ""
-		#if g.need_loading:
-			#tmp_text = "☒"
-		#else:
-			#tmp_text = "☐"
-		#add_grid_button(row, tmp_text, row_id, 6, 48)
-		#
-		## Comment
-		#add_grid_button(row, str(g.comment), row_id, 8, 120)
-		#
-		#if row_id == selected_row:
-			#row.modulate = Color(1,0.5,0)
-		#
-		#row_id += 1
-
 func add_header_grid_button(text: String, row_id: int, column_id: int, column_size: int):
 	var new_button: GridButton = GridButton.new()
 	new_button.set_text(text)
@@ -564,7 +479,7 @@ func _on_header_pressed(column_id):
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ReloadDatabase"):
-		reload_database_2()
+		reload_database()
 	if event.is_action_pressed("ResetDatabase"):
 		reset_database_grid()
 
