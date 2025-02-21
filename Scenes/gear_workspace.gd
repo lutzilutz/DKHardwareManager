@@ -242,26 +242,21 @@ func reset_database_grid():
 	for c in database_grid.get_children():
 		c.queue_free()
 		await c.tree_exited
-	
-	#print("----- Database structure after reset ----------")
-	#for c in database_grid.get_children():
-		#print("[DataHBox child]")
-		#print("   [", c.get_children().size(), " Subchild]")
-	#if database_grid.get_child_count() == 0:
-		#print("No child")
-	#print("-----------------------------------------------")
 
 func reload_database():
 	
-	reset_database_grid()
+	#reset_database_grid()
 	
-	#print("----- Database structure before reloading -----")
-	#for c in database_grid.get_children():
-		#print("[DataHBox child]")
-		#print("   [", c.get_children().size(), " Subchild]")
-	#if database_grid.get_child_count() == 0:
-		#print("No child")
-	#print("-----------------------------------------------")
+	for c in header_grid.get_children():
+		c.queue_free()
+		await c.tree_exited
+	
+	for c in database_grid.get_children():
+		c.queue_free()
+		await c.tree_exited
+	
+	if database_grid.get_child_count() > 0:
+		print("ERROR: Asynchronous issue ??? Database grid isn't empty ! reload_database()")
 	
 	var row_id = 0
 	
@@ -466,6 +461,7 @@ func _on_header_pressed(column_id):
 		print("descending")
 	sorting_column_id = column_id
 	gear_database.sort_gears(column_id, sorting_ascending)
+	
 	reload_database()
 	
 	for b in header_grid.get_children():
