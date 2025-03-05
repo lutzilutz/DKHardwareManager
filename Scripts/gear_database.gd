@@ -3,7 +3,7 @@ class_name GearDatabase
 
 @export var gears: Array = []
 
-func add_new_gear(new_gear: Gear):
+func add_new_gear_OLD(new_gear: Gear):
 	var expected_id = 0
 	for i in range(gears.size()):
 		if i != gears[i].id:
@@ -12,6 +12,25 @@ func add_new_gear(new_gear: Gear):
 			break
 		else:
 			expected_id = i+1
+	
+	var tmp_gear = new_gear.duplicate()
+	tmp_gear.id = expected_id
+	
+	gears.append(tmp_gear)
+	gears.sort_custom(custom_sort)
+
+func add_new_gear(new_gear: Gear):
+	var expected_id = 0
+	var found_hole = true
+	for i in range(gears.size()):
+		for g in gears:
+			if i == g.id:
+				expected_id += 1
+				found_hole = false
+				break
+		if found_hole:
+			break
+		found_hole = true
 	
 	var tmp_gear = new_gear.duplicate()
 	tmp_gear.id = expected_id

@@ -304,7 +304,7 @@ func reload_database():
 				new_vbox.size_flags_stretch_ratio = 0.4
 		new_vbox.add_theme_constant_override("separation",0)
 		new_vbox.set_mouse_filter(Control.MOUSE_FILTER_PASS)
-		print("Adding column node with name : ", new_vbox.name)
+		#print("Adding column node with name : ", new_vbox.name)
 		#print("Current DataHBox children count : ", database_grid.get_child_count())
 		database_grid.add_child(new_vbox)
 	
@@ -392,13 +392,13 @@ func reload_database():
 		
 		row_id += 1
 		
-	print("----- Database structure after reloading -----")
-	for c in database_grid.get_children():
-		print("[DataHBox child]")
-		print("   [", c.get_children().size(), " Subchild]")
-	if database_grid.get_child_count() == 0:
-		print("No child")
-	print("-----------------------------------------------")
+	#print("----- Database structure after reloading -----")
+	#for c in database_grid.get_children():
+		#print("[DataHBox child]")
+		#print("   [", c.get_children().size(), " Subchild]")
+	#if database_grid.get_child_count() == 0:
+		#print("No child")
+	#print("-----------------------------------------------")
 
 func add_header_grid_button(text: String, row_id: int, column_id: int, column_size: int):
 	var new_button: GridButton = GridButton.new()

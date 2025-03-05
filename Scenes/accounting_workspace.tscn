@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://y7r1uc1aocj8"]
+[gd_scene format=3 uid="uid://bt8wdmg12qnw"]
 
-[node name="ShootingWorkspace" type="Control"]
+[node name="AccountingWorkspace" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,4 +12,4 @@ grow_vertical = 2
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
-text = "[WIP] Shooting Workspace"
+text = "[WIP] Accounting Workspace"

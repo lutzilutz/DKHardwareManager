@@ -20,6 +20,7 @@ func _ready() -> void:
 	
 	get_node("Window/HBoxContainer2/VBoxContainer/DatabaseButton").pressed.connect(_on_database_button_pressed)
 	get_node("Window/HBoxContainer2/VBoxContainer/ShootingButton").pressed.connect(_on_shooting_button_pressed)
+	get_node("Window/HBoxContainer2/VBoxContainer/AccountingButton").pressed.connect(_on_accounting_button_pressed)
 	get_node("Window/HBoxContainer2/VBoxContainer/UserButton").pressed.connect(_on_user_button_pressed)
 
 func save_frame():
@@ -57,16 +58,25 @@ func save_to_file():
 func _on_database_button_pressed():
 	get_node("Window/HBoxContainer2/Workspace/GearWorkspace").set_visible(true)
 	get_node("Window/HBoxContainer2/Workspace/ShootingWorkspace").set_visible(false)
+	get_node("Window/HBoxContainer2/Workspace/AccountingWorkspace").set_visible(false)
 	get_node("Window/HBoxContainer2/Workspace/UserWorkspace").set_visible(false)
 
 func _on_shooting_button_pressed():
 	get_node("Window/HBoxContainer2/Workspace/GearWorkspace").set_visible(false)
 	get_node("Window/HBoxContainer2/Workspace/ShootingWorkspace").set_visible(true)
+	get_node("Window/HBoxContainer2/Workspace/AccountingWorkspace").set_visible(false)
+	get_node("Window/HBoxContainer2/Workspace/UserWorkspace").set_visible(false)
+
+func _on_accounting_button_pressed():
+	get_node("Window/HBoxContainer2/Workspace/GearWorkspace").set_visible(false)
+	get_node("Window/HBoxContainer2/Workspace/ShootingWorkspace").set_visible(false)
+	get_node("Window/HBoxContainer2/Workspace/AccountingWorkspace").set_visible(true)
 	get_node("Window/HBoxContainer2/Workspace/UserWorkspace").set_visible(false)
 
 func _on_user_button_pressed():
 	get_node("Window/HBoxContainer2/Workspace/GearWorkspace").set_visible(false)
 	get_node("Window/HBoxContainer2/Workspace/ShootingWorkspace").set_visible(false)
+	get_node("Window/HBoxContainer2/Workspace/AccountingWorkspace").set_visible(false)
 	get_node("Window/HBoxContainer2/Workspace/UserWorkspace").set_visible(true)
 
 func _on_need_save_to_file():
