@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://e1b28cf47r24"]
 
-[ext_resource type="Script" path="res://Scenes/gear_workspace.gd" id="1_h0jah"]
+[ext_resource type="Script" uid="uid://c28ramdk2742b" path="res://Scenes/gear_workspace.gd" id="1_h0jah"]
 [ext_resource type="Theme" uid="uid://dru2g57dtidcb" path="res://Themes/default_grid.tres" id="2_e8uob"]
 
 [node name="GearWorkspace" type="VBoxContainer"]

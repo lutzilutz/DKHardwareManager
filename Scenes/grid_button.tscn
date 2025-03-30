@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ch7nnrtp627m2"]
 
-[ext_resource type="Script" path="res://Scenes/grid_button.gd" id="1_buaro"]
+[ext_resource type="Script" uid="uid://y1s123cx1rw4" path="res://Scenes/grid_button.gd" id="1_buaro"]
 
 [node name="GridButton" type="Button"]
 anchors_preset = 15
